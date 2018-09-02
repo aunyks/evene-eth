@@ -249,14 +249,14 @@ contract ERC721Basic {
    * @dev Internal function to mint a new token
    * Reverts if the given token ID already exists
    * @param _to The address that will own the minted token
-   * @param _tokenId uint256 ID of the token to be minted by the msg.sender
    */
-  function buy(address _to) public {
+  function buy(address _to) public payable {
     require(tokenIndex <= numTokens);
     require(_to != address(0));
     uint256 _tokenId = tokenIndex;
     addTokenTo(_to, _tokenId);
     tokenIndex += 1;
+    beneficiaryAddress.transfer(msg.value);
     emit Transfer(address(0), _to, _tokenId);
   }
 
@@ -310,7 +310,7 @@ contract ERC721Basic {
     uint256 _tokenId,
     bytes _data
   )
-    internal
+    internal pure
     returns (bool)
   {
     // because we don't *really* wanna support onERC721Received i guess
